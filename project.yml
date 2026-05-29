@@ -1,7 +1,6 @@
-targetArea:
-  packages:
-    - name: api
-      functions:
-        - name: add-user
-          runtime: 'nodejs:default'
-          web: true
+packages:
+  - name: api
+    functions:
+      - name: add-user
+        runtime: 'nodejs:default'
+        web: true
