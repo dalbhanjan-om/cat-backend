@@ -24,10 +24,10 @@ async function main(args) {
     }
 
     try {
-        // DATABASE_URL will be injected securely by App Platform
-        const dbUri = process.env.DATABASE_URL;
+        // Hardcoded URL for now as requested
+        const dbUri = "mongodb+srv://doadmin:WOE4287S0Z5ajY19@private-db-mdb-blr1-26412-abaeebe9.mongo.ondigitalocean.com/admin?tls=true&authSource=admin";
         const client = await connectToDatabase(dbUri);
-        const db = client.db('brickpool_prod');
+        const db = client.db('admin');
         
         const result = await db.collection('users').insertOne({
             name,
