@@ -2,5 +2,5 @@ packages:
   - name: api
     functions:
       - name: add-user
-        runtime: 'nodejs:default'
+        runtime: 'nodejs:18'
         web: true
