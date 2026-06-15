@@ -25,7 +25,7 @@ async function main(args) {
 
     try {
         // Hardcoded URL for now as requested
-        const dbUri = "mongodb+srv://doadmin:WOE4287S0Z5ajY19@private-db-mdb-blr1-26412-abaeebe9.mongo.ondigitalocean.com/admin?tls=true&authSource=admin";
+        const dbUri = "mongodb+srv://doadmin:WOE4287S0Z5ajY19@db-mdb-blr1-26412-4db0910f.mongo.ondigitalocean.com/admin?tls=true&authSource=admin";
         const client = await connectToDatabase(dbUri);
         const db = client.db('admin');
         
