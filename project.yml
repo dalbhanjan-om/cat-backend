@@ -4,3 +4,5 @@ packages:
       - name: add-user
         runtime: 'nodejs:18'
         web: true
+        limits:
+          timeout: 10000
