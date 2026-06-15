@@ -18,13 +18,13 @@ async function main(args) {
     // 1. Ensure it's a POST request
     const httpMethod = args.__ow_method || 'post';
     if (httpMethod.toLowerCase() !== 'post') {
-        return { statusCode: 405, body: { error: 'Method Not Allowed.' } };
+        return { statusCode: 405, headers: { 'Content-Type': 'application/json' }, body: { error: 'Method Not Allowed.' } };
     }
 
     // 2. Extract POST body parameters
     const { name, email } = args;
     if (!name || !email) {
-        return { statusCode: 400, body: { error: 'Missing fields.' } };
+        return { statusCode: 400, headers: { 'Content-Type': 'application/json' }, body: { error: 'Missing fields.' } };
     }
 
     try {
@@ -47,6 +47,7 @@ async function main(args) {
 
         return {
             statusCode: 201,
+            headers: { 'Content-Type': 'application/json' },
             body: { success: true, insertedId: result.insertedId.toString() }
         };
     } catch (error) {
@@ -57,6 +58,7 @@ async function main(args) {
         }
         return {
             statusCode: 500,
+            headers: { 'Content-Type': 'application/json' },
             body: { 
                 error: error.message ? error.message.toString() : "Unknown error", 
                 stack: error.stack ? error.stack.toString() : "",
