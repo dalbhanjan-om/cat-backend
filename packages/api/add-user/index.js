@@ -18,13 +18,13 @@ async function main(args) {
     // 1. Ensure it's a POST request
     const httpMethod = args.__ow_method || 'post';
     if (httpMethod.toLowerCase() !== 'post') {
-        return { statusCode: 405, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ error: 'Method Not Allowed.' }) };
+        return { statusCode: 405, body: { error: 'Method Not Allowed.' } };
     }
 
     // 2. Extract POST body parameters
     const { name, email } = args;
     if (!name || !email) {
-        return { statusCode: 400, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ error: 'Missing fields.' }) };
+        return { statusCode: 400, body: { error: 'Missing fields.' } };
     }
 
     try {
@@ -47,8 +47,7 @@ async function main(args) {
 
         return {
             statusCode: 201,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ success: true, insertedId: result.insertedId })
+            body: { success: true, insertedId: result.insertedId.toString() }
         };
     } catch (error) {
         console.error("Function error:", error);
@@ -58,12 +57,11 @@ async function main(args) {
         }
         return {
             statusCode: 500,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                error: error.message, 
-                stack: error.stack,
+            body: { 
+                error: error.message ? error.message.toString() : "Unknown error", 
+                stack: error.stack ? error.stack.toString() : "",
                 hint: "If this is a MongoServerSelectionError, your Database Trusted Sources firewall is blocking the connection. If MODULE_NOT_FOUND, mongodb isn't installed."
-            })
+            }
         };
     }
 }
