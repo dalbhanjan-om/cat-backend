@@ -7,7 +7,9 @@ async function connectToDatabase(uri) {
     
     // Add 5-second timeout so it fails gracefully instead of crashing the DO function container
     const client = new MongoClient(uri, { serverSelectionTimeoutMS: 5000, connectTimeoutMS: 5000 });
+    console.log("Connecting to MongoDB...");
     await client.connect();
+    console.log("Connected to MongoDB.");
     cachedClient = client;
     return client;
 }
@@ -29,13 +31,19 @@ async function main(args) {
         // Hardcoded URL for now as requested
         const dbUri = "mongodb+srv://doadmin:WOE4287S0Z5ajY19@db-mdb-blr1-26412-4db0910f.mongo.ondigitalocean.com/admin?tls=true&authSource=admin";
         const client = await connectToDatabase(dbUri);
-        const db = client.db('admin');
-
+        console.log("Authenticating and selecting database...");
+        const db = client.db('acecat_dev');
+        
+        console.log("Inserting user...");
         const result = await db.collection('users').insertOne({
             name,
             email,
             createdAt: new Date()
         });
+
+        console.log("Insert successful, closing client...");
+        await client.close();
+        cachedClient = null;
 
         return {
             statusCode: 201,
@@ -43,6 +51,11 @@ async function main(args) {
             body: JSON.stringify({ success: true, insertedId: result.insertedId })
         };
     } catch (error) {
+        console.error("Function error:", error);
+        if (cachedClient) {
+            await cachedClient.close().catch(() => {});
+            cachedClient = null;
+        }
         return {
             statusCode: 500,
             headers: { 'Content-Type': 'application/json' },
